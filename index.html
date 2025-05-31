@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NetIQ - Networking Assistant</title>
+  <title>ChatIQ</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -12,8 +12,8 @@
 
   <!-- Header -->
   <header class="relative bg-gradient-to-r from-cyan-500 to-indigo-600 text-white py-6 text-center">
-    <h1 class="text-3xl font-bold">NetIQ Networking Assistant</h1>
-    <p class="text-lg mt-1 opacity-90">Your Professional AI Companion for Network Queries</p>
+    <h1 class="text-3xl font-bold">ChatIQ</h1>
+    <p class="text-lg mt-1 opacity-90">Your Professional AI Companion for Your Queries</p>
   </header>
 
   <main class="container mx-auto px-4 py-8 space-y-16">
@@ -50,7 +50,7 @@
         </div>
         <!-- Bot Message -->
         <div id="botBox" class="hidden">
-          <p class="text-sm text-gray-500 mb-1">NetIQ:</p>
+          <p class="text-sm text-gray-500 mb-1">ChatIQ:</p>
           <div class="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-lg max-w-full">
             <span id="botText"></span>
           </div>
@@ -60,7 +60,7 @@
 
     <!-- Live Chat Section -->
     <section class="text-center">
-      <h2 class="text-2xl font-semibold mb-6">💬 Live Chat with NetIQ</h2>
+      <h2 class="text-2xl font-semibold mb-6">💬 Live Chat with ChatIQ</h2>
       <iframe
         src="https://cdn.botpress.cloud/webchat/v2.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/04/21/16/20250421160557-1PDY6P62.json"
         class="w-full max-w-4xl h-96 mx-auto rounded-xl shadow-lg border-0"
@@ -114,16 +114,16 @@
 
   <!-- Footer -->
   <footer class="bg-gradient-to-b from-cyan-500 to-indigo-600 text-white py-10 text-center">
-    <h2 class="text-2xl font-bold mb-4">About NetIQ</h2>
+    <h2 class="text-2xl font-bold mb-4">About ChatIQ</h2>
     <p class="max-w-2xl mx-auto mb-6">
-      NetIQ assists students and professionals by providing accurate, real-time answers to networking questions through voice and chat interactions.
+      ChatIQ assists  providing accurate, real-time answers to your  questions through voice and chat interactions.
     </p>
     <div class="space-y-2">
       <p>📞 <a href="tel:+919369572534" class="underline">+91 93695 72534</a></p>
       <p>✉️ <a href="mailto:ambuj20maurya@gmail.com" class="underline">ambuj20maurya@gmail.com</a></p>
       <p>📍 Mirzapur, Uttar Pradesh, India</p>
     </div>
-    <p class="mt-6 text-sm">&copy; 2025 NetIQ Networking Assistant. All rights reserved.</p>
+    <p class="mt-6 text-sm">&copy; 2025 ChatIQ . All rights reserved.</p>
   </footer>
 
   <!-- =========================
@@ -157,12 +157,20 @@
 
       // Build the same system prompt as in Python
       const promptText = 
-        "You are a smart NetIQ bot. Keep responses short, precise, 5-6 lines (~50 words). " +
-        "When a user asks who you are, respond: 'I am a smart NetIQ bot.' " +
-        "If the user asks about your name, respond: 'I am a smart NetIQ bot.' " +
-        "If the user asks who made you, respond: 'I was made by NetIQ.' " +
-        "you can answer any question ask by user.' " +
+        "You are a smart ChatIQ bot. Keep responses short, precise, 5-6 lines (~50 words). " +
+        "You are a smart and integent you can answer any question ask by user. " +
+        "answer in more humanize form without bullten point and unnecssary special charater. " +
+        "When a user asks who you are, respond: 'I am a smart ChatIQ bot.' " +
+        "If the user asks about your name, respond: 'I am a smart ChatIQ bot.' " +
+        "If the user asks who made you, respond: 'I was made by ChatIQ.' " +
         `Question: ${userInput}`;
+      
+        let conversationHistory = [
+  { role: "user", content: "What is TCP?" },
+  { role: "assistant", content: "TCP stands for Transmission Control Protocol..." },
+  { role: "user", content: userInput }
+];
+
 
       const payload = {
         contents: [
