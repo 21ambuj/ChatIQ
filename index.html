@@ -1,319 +1,590 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ChatIQ</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ChatIQ - Unified AI Chat</title>
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth; /* Added for smoother navigation if needed */
+        }
+        /* Light theme chat bubbles for the main chatBox */
+        .chat-bubble-user {
+            background-color: #DBEAFE; /* Tailwind: blue-100 */
+            color: #1E3A8A; /* Tailwind: blue-800 */
+            border-radius: 0.75rem; /* rounded-lg */
+            padding: 0.75rem 1rem; /* px-4 py-3 */
+            max-width: 80%;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .chat-bubble-bot {
+            background-color: #D1FAE5; /* Tailwind: green-100 */
+            color: #065F46; /* Tailwind: green-700 */
+            border-radius: 0.75rem; /* rounded-lg */
+            padding: 0.75rem 1rem; /* px-4 py-3 */
+            max-width: 80%;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+        .scroll-smooth {
+            scroll-behavior: smooth;
+        }
+        #voiceInputBtn.recording .mic-icon-path { /* More specific for the SVG path if needed */
+            fill: #ef4444; /* Red 500 for recording state */
+        }
+         #voiceInputBtn .mic-icon-path { /* Default fill for mic icon */
+            fill: currentColor; 
+        }
+
+        /* Custom scrollbar for chatBox (light theme adaptation) */
+        #chatBox::-webkit-scrollbar {
+            width: 8px;
+        }
+        #chatBox::-webkit-scrollbar-track {
+            background: #F3F4F6; /* gray-100 */
+            border-radius: 10px;
+        }
+        #chatBox::-webkit-scrollbar-thumb {
+            background: #D1D5DB; /* gray-300 */
+            border-radius: 10px;
+        }
+        #chatBox::-webkit-scrollbar-thumb:hover {
+            background: #9CA3AF; /* gray-400 */
+        }
+
+        /* Styles for the input bar in light theme */
+        .chat-input-bar-container {
+            background-color: #F9FAFB; /* gray-50 */
+            border-top: 1px solid #E5E7EB; /* gray-200 */
+        }
+        .chat-input-field {
+            background-color: #FFFFFF; /* white */
+            border: 1px solid #D1D5DB; /* gray-300 */
+            color: #1F2937; /* gray-800 */
+        }
+        .chat-input-field::placeholder {
+            color: #6B7280; /* gray-500 */
+        }
+        .control-button {
+            border-radius: 0.5rem; /* rounded-lg */
+            padding: 0.5rem; /* p-2 */
+            transition: background-color 0.15s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .control-button:hover {
+            background-color: #E5E7EB; /* gray-200 for hover on non-colored buttons */
+        }
+        .control-button svg {
+             width: 1.25rem; /* w-5 */
+             height: 1.25rem; /* h-5 */
+             color: #4B5563; /* gray-600 for default icon color */
+        }
+
+         #sendBtn { background-color: #0EA5E9; /* sky-500 */ }
+         #sendBtn:hover { background-color: #0284C7; /* sky-600 */ }
+         #sendBtn svg { color: white; }
+
+         #fileUploadBtn { background-color: #10B981; /* emerald-500 */ }
+         #fileUploadBtn:hover { background-color: #059669; /* emerald-600 */ }
+         #fileUploadBtn svg { color: white; }
+
+         #cameraBtn { background-color: #8B5CF6; /* purple-500 */ }
+         #cameraBtn:hover { background-color: #7C3AED; /* purple-600 */ }
+         #cameraBtn svg { color: white; }
+         
+         #voiceInputBtn { background-color: #EC4899; /* pink-500 */ }
+         #voiceInputBtn:hover { background-color: #DB2777; /* pink-600 */ }
+         #voiceInputBtn.recording { background-color: #ef4444; /* Red-500 when recording */ }
+         #voiceInputBtn.recording:hover { background-color: #dc2626; /* Red-600 when recording hover */ }
+         #voiceInputBtn svg { color: white; }
+
+    </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-  <!-- Header -->
-  <header class="relative bg-gradient-to-r from-cyan-500 to-indigo-600 text-white py-6 text-center">
-    <h1 class="text-3xl font-bold">ChatIQ</h1>
-    <p class="text-lg mt-1 opacity-90">Your Professional AI Companion </p>
-  </header>
+    <header class="relative bg-gradient-to-r from-cyan-500 to-indigo-600 text-white py-6 text-center shadow-md">
+        <h1 class="text-3xl font-bold">ChatIQ</h1>
+        <p class="text-lg mt-1 opacity-90">Your Professional AI Companion</p>
+    </header>
 
-  <main class="container mx-auto px-4 py-8 space-y-16">
-    <!-- Voice Interaction Banner -->
-    <section class="text-center">
-      <h2 class="text-2xl font-semibold mb-4">One-to-One Voice Interaction</h2>
-      <button onclick="startListening()" aria-label="Start Voice Chat">
-        <img
-          src="https://cdn.dribbble.com/userupload/32122583/file/original-400827bdf243931c8ffd26a268a837ce.gif"
-          alt="Voice Bot Banner"
-          class="mx-auto w-full max-w-xl rounded-2xl shadow-lg hover:scale-105 transition-transform"
-        />
-      </button>
-    </section>
+    <main class="container mx-auto px-4 py-8 space-y-12">
+        <section class="text-center">
+            <h2 class="text-2xl font-semibold mb-4">One-to-One Voice Interaction</h2>
+            <button onclick="startListeningAdapter()" aria-label="Start Voice Chat with GIF">
+                <img
+                    src="https://cdn.dribbble.com/userupload/32122583/file/original-400827bdf243931c8ffd26a268a837ce.gif"
+                    alt="Voice Bot Banner"
+                    class="mx-auto w-full max-w-md rounded-2xl shadow-lg hover:scale-105 transition-transform"
+                />
+            </button>
+        </section>
 
-    <!-- Chat Bubbles -->
-    <section class="max-w-xl mx-auto">
-      <div class="text-center mb-6">
-        <button 
-          onclick="startListening()" 
-          class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-2 rounded-lg shadow-md transition"
-        >
-          🎙️ Start Voice Chat
-        </button>
-      </div>
+        <section class="max-w-xl mx-auto">
+            <div class="text-center mb-6">
+                <button 
+                    onclick="startListeningAdapter()" 
+                    class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-md transition text-lg font-medium flex items-center justify-center mx-auto"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="mr-2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm7 9a7 7 0 0 1-14 0H3a9 9 0 0 0 8 8.94V22h2v-3.06A9 9 0 0 0 21 10h-2z"></path></svg>
+                    Start Voice Chat
+                </button>
+            </div>
+            <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4 hidden" id="simpleChatDisplay"> 
+                <div id="userBox" class="hidden">
+                    <p class="text-sm text-gray-500 mb-1">You:</p>
+                    <div class="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-lg max-w-full">
+                        <span id="userText"></span>
+                    </div>
+                </div>
+                <div id="botBox" class="hidden">
+                    <p class="text-sm text-gray-500 mb-1">ChatIQ:</p>
+                    <div class="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-lg max-w-full">
+                        <span id="botText"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-      <div class="bg-white rounded-2xl shadow-lg p-6 space-y-6">
-        <!-- User Message -->
-        <div id="userBox" class="hidden">
-          <p class="text-sm text-gray-500 mb-1">You:</p>
-          <div class="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-lg max-w-full">
-            <span id="userText"></span>
-          </div>
+        <section id="interactiveChatSection" class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col" style="min-height: 70vh; max-height:85vh;">
+            <div class="flex-grow overflow-y-auto p-3 sm:p-4 space-y-3" id="chatBoxWrapper"> <div id="imagePreviewContainer" class="hidden flex flex-col items-center space-y-2 mb-3">
+                    <img id="imagePreview" src="#" alt="Image Preview" class="max-w-full h-auto max-h-48 sm:max-h-60 rounded-lg shadow-md border-2 border-gray-200"/>
+                    <button id="removeImageBtn" class="text-red-500 hover:text-red-400 text-sm font-medium flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        Remove Image
+                    </button>
+                </div>
+                <div id="videoPreviewContainer" class="hidden flex flex-col items-center space-y-2 mb-3">
+                    <video id="videoPreview" autoplay playsinline class="max-w-full h-auto max-h-48 sm:max-h-60 rounded-lg shadow-md border-2 border-gray-200 bg-gray-200"></video>
+                    <div class="flex space-x-2 mt-2">
+                        <button id="captureImageBtn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-3 rounded-lg transition duration-150 text-sm">Capture</button>
+                        <button id="stopCameraBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-lg transition duration-150 text-sm">Stop Camera</button>
+                    </div>
+                </div>
+                <div id="chatBox" class="space-y-4"> <div class="flex justify-start w-full">
+                        <div class="chat-bubble-bot">
+                            Hello! I am ChatIQ. How can I assist you today?
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-bar-container p-2 sm:p-3">
+                <div id="loadingIndicator" class="hidden text-center pb-2">
+                    <div class="flex justify-center items-center">
+                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-600"></div>
+                        <p class="text-cyan-700 ml-2 text-sm">ChatIQ is thinking...</p>
+                    </div>
+                </div>
+                <div id="errorMessage" class="hidden bg-red-100 text-red-700 p-2 rounded-md text-center mb-2 text-sm"></div>
+                <div class="flex items-center space-x-1 sm:space-x-2">
+                    <input type="text" id="userInput" class="flex-grow chat-input-field rounded-lg p-2.5 focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-sm sm:text-base" placeholder="Ask ChatIQ or describe image...">
+                    <button id="sendBtn" title="Send Message" class="control-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"></path></svg>
+                    </button>
+                    <button id="fileUploadBtn" title="Upload Image" class="control-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V4.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5V15c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9c0 1.66 1.34 3 3 3s3-1.34 3-3V4.5C16 2.01 13.99 0 11.5 0S7 2.01 7 4.5V15c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"></path></svg>
+                    </button>
+                    <input type="file" id="fileInput" class="hidden" accept="image/*">
+                    <button id="cameraBtn" title="Use Camera" class="control-button">
+                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 11.5c-2.49 0-4.5-2.01-4.5-4.5S12.51 6.5 15 6.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5z"></path><circle cx="15" cy="11" r="2.5"></circle></svg>
+                    </button>
+                    <button id="voiceInputBtn" title="Voice Input" class="control-button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mic-icon"><path class="mic-icon-path" d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-2xl font-semibold text-center mb-8">Key Features</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow text-center">
+                    <img src="https://img.freepik.com/premium-vector/ai-chat-bot-technology-concept-people-chatting-with-robot-asking-questions-receiving-answers_36358-1867.jpg" alt="AI Suggestions" class="mx-auto w-36 h-36 object-contain rounded mb-4"/>
+                    <h3 class="font-semibold text-lg">AI-Powered Suggestions</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow text-center">
+                    <img src="https://i.pinimg.com/originals/7d/9b/1d/7d9b1d662b28cd365b33a01a3d0288e1.gif" alt="Real-Time Voice Chat" class="mx-auto w-36 h-36 object-cover rounded-full mb-4"/>
+                    <h3 class="font-semibold text-lg">Real-Time Voice Chat</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow text-center">
+                    <img src="https://itsm.tools/wp-content/uploads/2021/11/bot-and-human.png" alt="Human-Bot Collaboration" class="mx-auto w-36 h-36 object-contain rounded mb-4"/>
+                    <h3 class="font-semibold text-lg">Human-Bot Collaboration</h3>
+                </div>
+            </div>
+        </section>
+
+        <section class="text-center">
+            <h2 class="text-2xl font-semibold mb-4">We Value Your Feedback</h2>
+            <p class="mb-6 text-gray-600">Help us improve by sharing your thoughts via our feedback form.</p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSc2N8OGqdbu2HFbxN4Y89Guv3Wnp9CHLYrz-bzu80kDjHQ3yg/viewform?usp=sharing" target="_blank" class="inline-block bg-gradient-to-r from-indigo-500 to-cyan-400 text-white font-medium px-8 py-3 rounded-full shadow-lg hover:from-indigo-600 hover:to-cyan-500 transition">
+                Give Feedback
+            </a>
+        </section>
+    </main>
+
+    <footer class="bg-gradient-to-b from-cyan-500 to-indigo-600 text-white py-10 text-center mt-12">
+        <h2 class="text-2xl font-bold mb-4">About ChatIQ</h2>
+        <p class="max-w-2xl mx-auto mb-6 px-4">
+            ChatIQ assists by providing accurate, real-time answers to your questions through voice, text, and image interactions.
+        </p>
+        <div class="space-y-2">
+            <p>📞 <a href="tel:+919369572534" class="hover:underline">+91 93695 72534</a></p>
+            <p>✉️ <a href="mailto:ambuj20maurya@gmail.com" class="hover:underline">ambuj20maurya@gmail.com</a></p>
+            <p>📍 Mirzapur, Uttar Pradesh, India</p>
         </div>
-        <!-- Bot Message -->
-        <div id="botBox" class="hidden">
-          <p class="text-sm text-gray-500 mb-1">ChatIQ:</p>
-          <div class="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-lg max-w-full">
-            <span id="botText"></span>
-          </div>
-        </div>
-      </div>
-    </section>
+        <p class="mt-6 text-sm opacity-90">&copy; 2025 ChatIQ. All rights reserved.</p>
+    </footer>
 
-    <!-- Live Chat Section -->
-    <section class="text-center">
-      <h2 class="text-2xl font-semibold mb-6">💬 Live Chat with ChatIQ</h2>
-      <iframe
-        src="https://cdn.botpress.cloud/webchat/v2.3/shareable.html?configUrl=https://files.bpcontent.cloud/2025/04/21/16/20250421160557-1PDY6P62.json"
-        class="w-full max-w-4xl h-96 mx-auto rounded-xl shadow-lg border-0"
-      ></iframe>
-    </section>
+    <script>
+    // API Keys & Configuration
+    const GOOGLE_API_KEY = "AIzaSyC4RwK4x692XDcHZikOaKfpxWHmIXm4kuM"; // Replace if needed
+    const MURF_API_KEY = "ap2_1ed5cd30-2f51-4ebc-b8f6-33c6a31c81e7"; // Replace if needed
+    const geminiApiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GOOGLE_API_KEY}`;
 
-     <!-- Features Gallery -->
-    <section>
-      <h2 class="text-2xl font-semibold text-center mb-8">Key Features</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow text-center">
-          <img 
-            src="https://img.freepik.com/premium-vector/ai-chat-bot-technology-concept-people-chatting-with-robot-asking-questions-receiving-answers_36358-1867.jpg" 
-            alt="AI Suggestions"
-            class="mx-auto w-36 h-36 rounded mb-4"
-          />
-          <h3 class="font-semibold text-lg">AI-Powered Suggestions</h3>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow text-center">
-          <img 
-            src="https://i.pinimg.com/originals/7d/9b/1d/7d9b1d662b28cd365b33a01a3d0288e1.gif" 
-            alt="Real-Time Voice Chat"
-            class="mx-auto w-36 h-36 object-cover rounded-full mb-4"
-          />
-          <h3 class="font-semibold text-lg">Real-Time Voice Chat</h3>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow text-center">
-          <img 
-            src="https://itsm.tools/wp-content/uploads/2021/11/bot-and-human.png" 
-            alt="Human-Bot Collaboration"
-            class="mx-auto w-36 h-36 rounded mb-4"
-          />
-          <h3 class="font-semibold text-lg">Human-Bot Collaboration</h3>
-        </div>
-      </div>
-    </section>
+    // DOM Elements for the primary chat interface
+    const chatBox = document.getElementById('chatBox'); // Main dynamic chatBox
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const fileUploadBtn = document.getElementById('fileUploadBtn');
+    const fileInput = document.getElementById('fileInput');
+    const cameraBtn = document.getElementById('cameraBtn');
+    const voiceInputBtn = document.getElementById('voiceInputBtn');
+    
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+    const imagePreview = document.getElementById('imagePreview');
+    const removeImageBtn = document.getElementById('removeImageBtn');
+    
+    const videoPreviewContainer = document.getElementById('videoPreviewContainer');
+    const videoPreview = document.getElementById('videoPreview');
+    const captureImageBtn = document.getElementById('captureImageBtn');
+    const stopCameraBtn = document.getElementById('stopCameraBtn');
 
-    <!-- Feedback Button -->
-    <section class="text-center">
-      <h2 class="text-2xl font-semibold mb-4">We Value Your Feedback</h2>
-      <p class="mb-6 text-gray-600">Help us improve by sharing your thoughts via our feedback form.</p>
-      <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLSc2N8OGqdbu2HFbxN4Y89Guv3Wnp9CHLYrz-bzu80kDjHQ3yg/viewform?usp=sharing"
-        target="_blank"
-        class="inline-block bg-gradient-to-r from-indigo-500 to-cyan-400 text-white font-medium px-8 py-3 rounded-full shadow-lg hover:from-indigo-600 hover:to-cyan-500 transition"
-      >
-        Give Feedback
-      </a>
-    </section>
-  </main>
+    const loadingIndicator = document.getElementById('loadingIndicator');
+    const errorMessage = document.getElementById('errorMessage');
 
-  <!-- Footer -->
-  <footer class="bg-gradient-to-b from-cyan-500 to-indigo-600 text-white py-10 text-center">
-    <h2 class="text-2xl font-bold mb-4">About ChatIQ</h2>
-    <p class="max-w-2xl mx-auto mb-6">
-      ChatIQ assists  providing accurate, real-time answers to your  questions through voice and chat interactions.
-    </p>
-    <div class="space-y-2">
-      <p>📞 <a href="tel:+919369572534" class="underline">+91 93695 72534</a></p>
-      <p>✉️ <a href="mailto:ambuj20maurya@gmail.com" class="underline">ambuj20maurya@gmail.com</a></p>
-      <p>📍 Mirzapur, Uttar Pradesh, India</p>
-    </div>
-    <p class="mt-6 text-sm">&copy; 2025 ChatIQ . All rights reserved.</p>
-  </footer>
+    // DOM Elements for the original simple display (if you want to use them for `startListeningAdapter`)
+    const userBoxSimple = document.getElementById("userBox");
+    const userTextSimple = document.getElementById("userText");
+    const botBoxSimple = document.getElementById("botBox");
+    const botTextSimple = document.getElementById("botText");
 
-  <!-- =========================
-       Main JavaScript Logic
-       ========================= -->
-  <script>
-    // ────────────────────────────────────────────────────────────────
-    // 1. Configuration: Insert your actual API keys here
-    // ────────────────────────────────────────────────────────────────
-    const GOOGLE_API_KEY = "AIzaSyC4RwK4x692XDcHZikOaKfpxWHmIXm4kuM"; // replace if needed
-    const MURF_API_KEY = "ap2_1ed5cd30-2f51-4ebc-b8f6-33c6a31c81e7";
+    // State variables
+    let currentBase64Image = null;
+    let currentMimeType = null;
+    let mediaStream = null;
+    let speechRecognition = null; // Will be initialized by initializeSpeechRecognition
+    let isRecording = false;
+    let currentBotAudio = null;
 
-    // ────────────────────────────────────────────────────────────────
-    // 2. Profanity List and Helper
-    // ────────────────────────────────────────────────────────────────
-    const VULGAR_WORDS = [
-      "badword1", "badword2", "offensiveword",
-      "fuck", "shit", "asshole", "bitch"
-    ];
-
+    // Profanity List
+    const VULGAR_WORDS = ["badword1", "badword2", "offensiveword", "fuck", "shit", "asshole", "bitch"];
     function containsVulgar(text) {
-      const t = text.toLowerCase();
-      return VULGAR_WORDS.some(bad => t.includes(bad));
+        if (!text) return false;
+        const t = text.toLowerCase();
+        return VULGAR_WORDS.some(bad => t.includes(bad));
     }
 
-    // ────────────────────────────────────────────────────────────────
-    // 3. Gemini‐2.0 “getBotReply” (Google API) – Client‐Side Fetch
-    // ────────────────────────────────────────────────────────────────
-    async function getBotReply(userInput) {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GOOGLE_API_KEY}`;
+    // --- Speech Recognition Initialization (for the main chat input) ---
+    function initializeSpeechRecognition() {
+        const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognitionAPI) {
+            speechRecognition = new SpeechRecognitionAPI();
+            speechRecognition.continuous = false;
+            speechRecognition.lang = 'en-US';
+            speechRecognition.interimResults = false;
+            speechRecognition.maxAlternatives = 1;
 
-      // Build the same system prompt as in Python
-      const promptText = 
-        "You are a smart ChatIQ bot. Keep responses short, precise, 5-6 lines (~50 words). " +
-        "You are a smart and integent you can answer any question ask by user. " +
-        "answer in more humanize form without bullten point and unnecssary special charater. " +
-        "When a user asks who you are, respond: 'I am a smart ChatIQ bot.' " +
-        "If the user asks about your name, respond: 'I am a smart ChatIQ bot.' " +
-        "If the user asks who made you, respond: 'I was made by ChatIQ.' " +
-        `Question: ${userInput}`;
-      
-        let conversationHistory = [
-  { role: "user", content: "What is TCP?" },
-  { role: "assistant", content: "TCP stands for Transmission Control Protocol..." },
-  { role: "user", content: userInput }
-];
-
-
-      const payload = {
-        contents: [
-          {
-            parts: [
-              { text: promptText }
-            ]
-          }
-        ]
-      };
-
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-        if (!response.ok) {
-          console.error("Gemini API Error:", response.statusText);
-          return "Sorry, something went wrong while generating a response.";
-        }
-        const data = await response.json();
-        // The Gemini response uses data.candidates[0].content.parts[0].text
-        return data.candidates[0].content.parts[0].text;
-      } catch (err) {
-        console.error("Gemini API Exception:", err);
-        return "Sorry, something went wrong while generating a response.";
-      }
-    }
-
-    // ────────────────────────────────────────────────────────────────
-    // 4. Murf TTS – Get Audio URL
-    // ────────────────────────────────────────────────────────────────
-    async function getMurfAudioUrl(text) {
-      const url = "https://api.murf.ai/speech/generate";
-      const payload = {
-        voice: "en-US-wesley",
-        text: text,
-        format: "mp3"
-      };
-
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "api-key": MURF_API_KEY,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify(payload),
-        });
-        if (!response.ok) {
-          console.error("Murf TTS Error:", response.statusText);
-          return null;
-        }
-        const data = await response.json();
-        return data.audioUrl || null;
-      } catch (err) {
-        console.error("Murf TTS Exception:", err);
-        return null;
-      }
-    }
-
-    // ────────────────────────────────────────────────────────────────
-    // 5. UI‐Update Helpers
-    // ────────────────────────────────────────────────────────────────
-    function showUserMessage(text) {
-      document.getElementById("userBox").classList.remove("hidden");
-      document.getElementById("userText").textContent = text;
-    }
-
-    function showBotMessage(text) {
-      document.getElementById("botBox").classList.remove("hidden");
-      document.getElementById("botText").textContent = text;
-    }
-
-    // ────────────────────────────────────────────────────────────────
-    // 6. Main “Start Listening” / Voice Recognition
-    // ────────────────────────────────────────────────────────────────
-    function startListening() {
-      const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!Recognition) {
-        alert("Your browser does not support speech recognition.");
-        return;
-      }
-      const recognition = new Recognition();
-      recognition.lang = "en-US";
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
-      recognition.start();
-
-      recognition.onresult = async (event) => {
-        const user_input = event.results[0][0].transcript.trim();
-        showUserMessage(user_input);
-
-        // If the user_input is empty, prompt for valid question
-        if (!user_input) {
-          const msg = "Please enter a valid question.";
-          showBotMessage(msg);
-          // Use native TTS for feedback
-          speechSynthesis.speak(new SpeechSynthesisUtterance(msg));
-          return;
-        }
-
-        // Check profanity
-        if (containsVulgar(user_input)) {
-          const rejectionMsg = 
-            "I'm sorry, I cannot assist with that type of content. " +
-            "Please ask networking-related questions.";
-          showBotMessage(rejectionMsg);
-
-          // Get Murf audio and play it (if available), otherwise fallback to speechSynthesis
-          const audioUrl = await getMurfAudioUrl(rejectionMsg);
-          if (audioUrl) {
-            const audio = new Audio(audioUrl);
-            audio.play();
-          } else {
-            speechSynthesis.speak(new SpeechSynthesisUtterance(rejectionMsg));
-          }
-          return;
-        }
-
-        // Otherwise, normal flow: call Gemini API
-        const botReply = await getBotReply(user_input);
-        showBotMessage(botReply);
-
-        // Fetch Murf audio for the reply
-        const murfAudioUrl = await getMurfAudioUrl(botReply);
-        if (murfAudioUrl) {
-          const audio = new Audio(murfAudioUrl);
-          audio.play();
+            speechRecognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript.trim();
+                userInput.value = speechResult; // Populate the main input field
+                stopRecording();
+                if (speechResult) {
+                    handleSendMessage(); // Send message using the main chat logic
+                } else {
+                    showError("Voice input was empty. Please try again.");
+                }
+            };
+            speechRecognition.onerror = (event) => {
+                console.error('Speech recognition error', event.error);
+                let errorMsg = `Speech recognition error: ${event.error}.`;
+                if (event.error === 'no-speech') {
+                    errorMsg = "No speech was detected. Please try again.";
+                } else if (event.error === 'audio-capture') {
+                    errorMsg = "Audio capture failed. Ensure microphone is working.";
+                } else if (event.error === 'not-allowed') {
+                    errorMsg = "Microphone access denied. Allow in browser settings.";
+                }
+                showError(errorMsg);
+                stopRecording();
+            };
+            speechRecognition.onend = () => {
+                if (isRecording) {
+                    stopRecording();
+                }
+            };
         } else {
-          // Fallback to Web Speech API if Murf fails
-          speechSynthesis.speak(new SpeechSynthesisUtterance(botReply));
+            console.warn('Speech Recognition API not supported.');
+            showError('Voice input is not supported in your browser.');
+            if(voiceInputBtn) voiceInputBtn.disabled = true;
         }
-      };
-
-      recognition.onerror = (err) => {
-        console.error("Speech Recognition Error:", err);
-        recognition.stop();
-      };
     }
-  </script>
+    initializeSpeechRecognition(); // Initialize on load for the main chat's voice button
 
+    // --- UI Update Functions for Main Chat ---
+    function addMessageToChat(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('flex', sender === 'user' ? 'justify-end' : 'justify-start', 'w-full');
+        const bubbleDiv = document.createElement('div');
+        bubbleDiv.classList.add(sender === 'user' ? 'chat-bubble-user' : 'chat-bubble-bot');
+        bubbleDiv.textContent = text; // Text content is safer
+        messageDiv.appendChild(bubbleDiv);
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    function showLoading(isLoading) {
+        loadingIndicator.classList.toggle('hidden', !isLoading);
+    }
+    function showError(messageText) {
+        errorMessage.textContent = messageText;
+        errorMessage.classList.remove('hidden');
+        setTimeout(() => { errorMessage.classList.add('hidden'); }, 5000);
+    }
+
+    // --- TTS Functions (Murf with Web Speech Fallback) ---
+    async function getMurfAudioUrl(text) {
+        if (!MURF_API_KEY || MURF_API_KEY.startsWith("ap2_1ed5cd30-2f51-4ebc-b8f6-33c6a31c81e7") && MURF_API_KEY.length < 20) { // Basic check for placeholder/invalid
+            console.warn("MURF_API_KEY potentially placeholder or not configured properly.");
+            // return null; // Uncomment if you want to strictly disable Murf with placeholder
+        }
+        const url = "https://api.murf.ai/speech/generate";
+        const payload = { voice: "en-US-wesley", text: text, format: "mp3" };
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "api-key": MURF_API_KEY, "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+            if (!response.ok) {
+                console.error("Murf TTS Error:", response.status, await response.text());
+                return null;
+            }
+            const data = await response.json();
+            return data.audioUrl || null;
+        } catch (err) {
+            console.error("Murf TTS Exception:", err);
+            return null;
+        }
+    }
+    async function speakResponse(text) {
+        if (currentBotAudio && !currentBotAudio.paused) currentBotAudio.pause();
+        speechSynthesis.cancel(); // Cancel any browser speech too
+
+        let spokenViaMurf = false;
+        if (MURF_API_KEY && !(MURF_API_KEY.startsWith("ap2_1ed5cd30-2f51-4ebc-b8f6-33c6a31c81e7") && MURF_API_KEY.length < 20)) { // Avoid calling with placeholder
+            const audioUrl = await getMurfAudioUrl(text);
+            if (audioUrl) {
+                try {
+                    currentBotAudio = new Audio(audioUrl);
+                    await currentBotAudio.play();
+                    spokenViaMurf = true;
+                } catch (error) { console.error("Error playing Murf audio:", error); currentBotAudio = null;}
+            }
+        }
+        if (!spokenViaMurf && 'speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            speechSynthesis.speak(utterance);
+        } else if (!spokenViaMurf) {
+            console.warn('TTS not available.');
+        }
+    }
+
+    // --- Gemini API Call (Main Chat Logic) ---
+    async function handleSendMessage() {
+        const userQueryText = userInput.value.trim();
+        if (!userQueryText && !currentBase64Image) {
+            showError("Please type, speak, or upload an image.");
+            return;
+        }
+        if (userQueryText) addMessageToChat(userQueryText, 'user');
+        userInput.value = '';
+
+        if (containsVulgar(userQueryText)) {
+            const rejectionMsg = "I cannot assist with that. Please ask appropriate questions.";
+            addMessageToChat(rejectionMsg, 'bot');
+            speakResponse(rejectionMsg);
+            return;
+        }
+        showLoading(true);
+        const botPersonaInstructions = `SYSTEM GUIDELINES:
+You are a smart ChatIQ bot. Aim for concise and precise responses. For simple questions, keep answers to around 5-6 lines or 50 words. For more complex requests, like recipes or explanations, provide a more detailed answer as needed. You are smart and intelligent and can answer any question asked by the user. Answer in a more humanized form, without bullet points or unnecessary special characters unless the format is essential for clarity (like in a recipe's steps). When a user asks "who are you", respond: 'I am a smart ChatIQ bot.' If the user asks about "your name", respond: 'I am a smart ChatIQ bot.' If the user asks "who made you", respond: 'I was made by ChatIQ.' --- User's request is below. If the user's message specifically asks one of the predefined questions above (who are you, your name, who made you), use ONLY the predefined answer. Otherwise, answer their question following all the general persona guidelines. If an image is provided, consider it in your response along with the text.`;
+        try {
+            let messageParts = [];
+            let fullPromptText = botPersonaInstructions;
+            if (userQueryText) {
+                fullPromptText += "\n\nUSER QUERY: " + userQueryText;
+            } else if (currentBase64Image && !userQueryText) {
+                fullPromptText += "\n\nUSER QUERY: Describe this image.";
+            }
+            messageParts.push({ text: fullPromptText });
+            if (currentBase64Image && currentMimeType) {
+                messageParts.push({ inlineData: { mimeType: currentMimeType, data: currentBase64Image } });
+            }
+            const payload = { contents: [{ role: "user", parts: messageParts }] };
+            const response = await fetch(geminiApiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`API Error: ${errorData.error?.message || response.statusText}`);
+            }
+            const result = await response.json();
+            let botResponseText = "Sorry, I couldn't process that.";
+            if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
+                botResponseText = result.candidates[0].content.parts[0].text;
+            } else if (result.promptFeedback?.blockReason) {
+                 botResponseText = `Blocked: ${result.promptFeedback.blockReason}. ${result.promptFeedback.blockReasonMessage || ''}`;
+            }
+            addMessageToChat(botResponseText, 'bot');
+            speakResponse(botResponseText);
+            if (currentBase64Image) removeImagePreview();
+        } catch (error) {
+            console.error('Error in handleSendMessage:', error);
+            showError(`Error: ${error.message}`);
+            addMessageToChat(`Error processing request. Please try again.`, 'bot');
+        } finally {
+            showLoading(false);
+        }
+    }
+
+    // --- File and Camera Handling ---
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            stopCameraStream();
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                imagePreview.src = e.target.result;
+                currentBase64Image = e.target.result.split(',')[1];
+                currentMimeType = file.type;
+                imagePreviewContainer.classList.remove('hidden');
+                videoPreviewContainer.classList.add('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else if (file) {
+            showError("Please select an image file (PNG, JPG, etc.).");
+            fileInput.value = null;
+        }
+    }
+    function removeImagePreview() {
+        imagePreview.src = '#';
+        imagePreviewContainer.classList.add('hidden');
+        currentBase64Image = null; currentMimeType = null; fileInput.value = null;
+    }
+    async function startCamera() {
+        removeImagePreview();
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            try {
+                mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+                videoPreview.srcObject = mediaStream;
+                videoPreviewContainer.classList.remove('hidden');
+                imagePreviewContainer.classList.add('hidden');
+            } catch (err) {
+                showError("Camera access error: " + err.message);
+            }
+        } else {
+            showError("Camera API not supported.");
+        }
+    }
+    function stopCameraStream() {
+        if (mediaStream) {
+            mediaStream.getTracks().forEach(track => track.stop());
+            mediaStream = null;
+        }
+        videoPreview.srcObject = null;
+        videoPreviewContainer.classList.add('hidden');
+    }
+    function captureImageFromVideo() {
+        if (!mediaStream || !videoPreview.videoWidth) {
+            showError("Camera not ready."); return;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = videoPreview.videoWidth; canvas.height = videoPreview.videoHeight;
+        canvas.getContext('2d').drawImage(videoPreview, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/png');
+        imagePreview.src = dataUrl;
+        currentBase64Image = dataUrl.split(',')[1]; currentMimeType = 'image/png';
+        imagePreviewContainer.classList.remove('hidden');
+        stopCameraStream();
+    }
+
+    // --- Voice Input Controls for Main Chat ---
+    function toggleVoiceInput() {
+        if (!speechRecognition) { showError('Voice input not available.'); return; }
+        if (isRecording) { stopRecording(); } else { startRecording(); }
+    }
+    function startRecording() {
+        try {
+            userInput.value = ""; 
+            if (currentBotAudio && !currentBotAudio.paused) currentBotAudio.pause();
+            speechSynthesis.cancel();
+            speechRecognition.start();
+            isRecording = true;
+            voiceInputBtn.classList.add('recording');
+            voiceInputBtn.title = "Stop Recording";
+        } catch (e) {
+            console.warn("Speech recognition start error:", e.message);
+            if (e.name === 'InvalidStateError') { stopRecording(); } 
+            else { showError("Could not start voice recording: " + e.message); }
+            isRecording = false; // ensure state is correct
+            voiceInputBtn.classList.remove('recording');
+            voiceInputBtn.title = "Voice Input";
+        }
+    }
+    function stopRecording() {
+        if (speechRecognition && isRecording) speechRecognition.stop();
+        isRecording = false;
+        voiceInputBtn.classList.remove('recording');
+        voiceInputBtn.title = "Voice Input";
+    }
+
+    // --- Adapter for original startListening buttons ---
+    function startListeningAdapter() {
+        // Scrolls to the main chat and attempts to activate its voice input
+        const mainChatSection = document.getElementById('interactiveChatSection');
+        if (mainChatSection) {
+            mainChatSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        // A small delay might be needed for scroll to finish before focusing or starting mic
+        setTimeout(() => {
+             if (userInput) userInput.focus(); // Focus the input field
+             toggleVoiceInput(); // Then try to start voice input
+        }, 300); // Adjust delay if needed
+    }
+    
+    // Event listeners for main chat controls
+    if(sendBtn) sendBtn.addEventListener('click', handleSendMessage);
+    if(userInput) userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendMessage(); }
+    });
+    if(fileUploadBtn) fileUploadBtn.addEventListener('click', () => fileInput.click());
+    if(fileInput) fileInput.addEventListener('change', handleFileSelect);
+    if(removeImageBtn) removeImageBtn.addEventListener('click', removeImagePreview);
+    if(cameraBtn) cameraBtn.addEventListener('click', startCamera);
+    if(captureImageBtn) captureImageBtn.addEventListener('click', captureImageFromVideo);
+    if(stopCameraBtn) stopCameraBtn.addEventListener('click', stopCameraStream);
+    if(voiceInputBtn) voiceInputBtn.addEventListener('click', toggleVoiceInput);
+
+    // API Key Check (Console warning)
+    if (GOOGLE_API_KEY === "AIzaSyC4RwK4x692XDcHZikOaKfpxWHmIXm4kuM" || MURF_API_KEY === "ap2_1ed5cd30-2f51-4ebc-b8f6-33c6a31c81e7") {
+        console.warn("Using placeholder API keys. Replace with your actual keys.");
+    }
+    </script>
 </body>
 </html>
