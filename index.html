@@ -181,22 +181,88 @@
                     </div>
                 </div>
                 <div id="errorMessage" class="hidden bg-red-100 text-red-700 p-2 rounded-md text-center mb-2 text-sm"></div>
-                <div class="flex items-center space-x-1 sm:space-x-2">
-                    <input type="text" id="userInput" class="flex-grow chat-input-field rounded-lg p-2.5 focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none text-sm sm:text-base" placeholder="Ask ChatIQ or describe image...">
-                    <button id="sendBtn" title="Send Message" class="control-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" fill="currentColor"></path></svg>
-                    </button>
-                    <button id="fileUploadBtn" title="Upload Image" class="control-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V4.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5V15c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9c0 1.66 1.34 3 3 3s3-1.34 3-3V4.5C16 2.01 13.99 0 11.5 0S7 2.01 7 4.5V15c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"></path></svg>
-                    </button>
-                    <input type="file" id="fileInput" class="hidden" accept="image/*">
-                    <button id="cameraBtn" title="Use Camera" class="control-button">
-                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4h-3.17L15 2H9L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 11.5c-2.49 0-4.5-2.01-4.5-4.5S12.51 6.5 15 6.5s4.5 2.01 4.5 4.5-2.01 4.5-4.5 4.5z"></path><circle cx="15" cy="11" r="2.5"></circle></svg>
-                    </button>
-                    <button id="voiceInputBtn" title="Voice Input" class="control-button">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mic-icon"><path class="mic-icon-path" d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"></path></svg>
-                    </button>
-                </div>
+                <div class="flex items-center flex-wrap gap-3 p-4 bg-gradient-to-r from-cyan-600 to-blue-500 rounded-xl shadow-lg max-w-xl mx-auto">
+
+  <input
+    type="text"
+    id="userInput"
+    placeholder="Ask ChatIQ or describe image..."
+    class="flex-grow min-w-[150px] p-3 rounded-lg text-sm sm:text-base outline-none
+           bg-gradient-to-r from-white/90 to-white/70
+           focus:ring-4 focus:ring-cyan-400 focus:outline-none
+           transition duration-300
+           placeholder:text-gray-400"
+  />
+
+  <button
+    id="sendBtn"
+    title="Send Message"
+    class="control-button group bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-blue-500 hover:to-cyan-500
+           p-3 rounded-lg shadow-md
+           text-white
+           transition duration-300
+           flex items-center justify-center
+           hover:scale-110 hover:rotate-3
+           active:scale-95"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 group-hover:animate-pulse">
+      <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+    </svg>
+  </button>
+
+  <button
+    id="fileUploadBtn"
+    title="Upload Image"
+    class="control-button group bg-gradient-to-r from-purple-400 via-pink-500 to-red-400
+           p-3 rounded-lg shadow-md
+           text-white
+           transition duration-300
+           flex items-center justify-center
+           hover:scale-110 hover:rotate-3
+           active:scale-95"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 group-hover:animate-bounce">
+      <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V4.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5V15c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9c0 1.66 1.34 3 3 3s3-1.34 3-3V4.5C16 2.01 13.99 0 11.5 0S7 2.01 7 4.5V15c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"></path>
+    </svg>
+  </button>
+  <input type="file" id="fileInput" class="hidden" accept="image/*">
+
+  <button
+    id="cameraBtn"
+    title="Use Camera"
+    class="control-button group bg-gradient-to-r from-green-400 to-emerald-500
+           p-3 rounded-lg shadow-md
+           text-white
+           transition duration-300
+           flex items-center justify-center
+           hover:scale-110 hover:rotate-3
+           active:scale-95"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 group-hover:animate-pulse">
+      <path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" />
+      <path fill-rule="evenodd" d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.426 1.458 2.426 2.915V19.5a2.25 2.25 0 01-2.25 2.25H5.25a2.25 2.25 0 01-2.25-2.25V9.525c0-1.456.994-2.676 2.426-2.915.382-.064.766-.123 1.152-.177.465-.067.87-.327 1.11-.71l.82-1.318a2.996 2.996 0 012.332-1.39zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5z" clip-rule="evenodd" />
+    </svg>
+  </button>
+
+  <button
+    id="voiceInputBtn"
+    title="Voice Input"
+    class="control-button group bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400
+           p-3 rounded-lg shadow-md
+           text-white
+           transition duration-300
+           flex items-center justify-center
+           hover:scale-110 hover:rotate-3
+           active:scale-95"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mic-icon w-6 h-6" fill="currentColor">
+      <path class="mic-icon-path" fill-rule="evenodd" d="M12.75 3.006a3.75 3.75 0 013.75 3.75v6.75a3.75 3.75 0 01-7.5 0v-6.75a3.75 3.75 0 013.75-3.75zM8.25 8.254a.75.75 0 000 1.5v.75c0 1.657 1.343 3 3 3s3-1.343 3-3v-.75a.75.75 0 000-1.5h-.75a2.25 2.25 0 01-2.25-2.25v-.75a.75.75 0 00-1.5 0v.75A2.25 2.25 0 019 8.254h-.75zM15 13.5a.75.75 0 001.5 0v-2.628A6.002 6.002 0 006.75 8.25v2.628a.75.75 0 001.5 0V8.25c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5v5.25z" clip-rule="evenodd" />
+      <path class="mic-icon-path" d="M6 10.5a.75.75 0 01.75.75v.75a4.5 4.5 0 009 0V11.25a.75.75 0 011.5 0v.75a6 6 0 01-12 0V11.25A.75.75 0 016 10.5zM12 16.5a.75.75 0 00-.75.75v.75h1.5v-.75a.75.75 0 00-.75-.75z" fill="currentColor" />
+    </svg>
+  </button>
+</div>
+
+                <h6 class="text-red-500 text-center text-sm">ChatIQ can make mistake Please recheck and verify information</h6>
             </div>
         </section>
 
