@@ -388,43 +388,51 @@
     }
 
     // --- Speech Recognition Initialization (for the main chat input) ---
-    function initializeSpeechRecognition() {
-        const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (SpeechRecognitionAPI) {
-            speechRecognition = new SpeechRecognitionAPI();
-            speechRecognition.continuous = false;
-            speechRecognition.lang = 'en-US';
-            speechRecognition.interimResults = false;
-            speechRecognition.maxAlternatives = 1;
+   function initializeSpeechRecognition() {
+    const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognitionAPI) {
+        speechRecognition = new SpeechRecognitionAPI();
+        speechRecognition.continuous = false;
+        
+        // ***** CHANGE THIS LINE FOR HINDI INPUT *****
+        speechRecognition.lang = 'hi-IN'; // Set to Hindi (India)
+        // *******************************************
+        
+        speechRecognition.interimResults = false; // Keep false for final results
+        speechRecognition.maxAlternatives = 1;
 
-            speechRecognition.onresult = (event) => {
-                const speechResult = event.results[0][0].transcript.trim();
-                userInput.value = speechResult; // Populate the main input field
+        speechRecognition.onresult = (event) => {
+            const speechResult = event.results[0][0].transcript.trim();
+            userInput.value = speechResult; // This should now be in Devanagari if you spoke Hindi
+            stopRecording();
+            if (speechResult) { 
+                handleSendMessage(); 
+            } else {
+                showError("Voice input was empty. Please try again.");
+            }
+        };
+
+        speechRecognition.onerror = (event) => {
+            console.error('Speech recognition error', event.error);
+            let errorMsg = `Speech recognition error: ${event.error}.`;
+            if (event.error === 'no-speech') {
+                errorMsg = "No speech was detected. Please try again.";
+            } else if (event.error === 'audio-capture') {
+                errorMsg = "Audio capture failed. Ensure microphone is working.";
+            } else if (event.error === 'not-allowed') {
+                errorMsg = "Microphone access denied. Allow in browser settings.";
+            } else if (event.error === 'language-not-supported') {
+                errorMsg = "The selected language ('hi-IN') is not supported by your browser's speech recognition.";
+            }
+            showError(errorMsg);
+            stopRecording();
+        };
+        
+        speechRecognition.onend = () => {
+            if (isRecording) {
                 stopRecording();
-                if (speechResult) {
-                    handleSendMessage(); // Send message using the main chat logic
-                } else {
-                    showError("Voice input was empty. Please try again.");
-                }
-            };
-            speechRecognition.onerror = (event) => {
-                console.error('Speech recognition error', event.error);
-                let errorMsg = `Speech recognition error: ${event.error}.`;
-                if (event.error === 'no-speech') {
-                    errorMsg = "No speech was detected. Please try again.";
-                } else if (event.error === 'audio-capture') {
-                    errorMsg = "Audio capture failed. Ensure microphone is working.";
-                } else if (event.error === 'not-allowed') {
-                    errorMsg = "Microphone access denied. Allow in browser settings.";
-                }
-                showError(errorMsg);
-                stopRecording();
-            };
-            speechRecognition.onend = () => {
-                if (isRecording) {
-                    stopRecording();
-                }
-            };
+            }
+        };
         } else {
             console.warn('Speech Recognition API not supported.');
             showError('Voice input is not supported in your browser.');
@@ -519,18 +527,8 @@
         }
         showLoading(true);
         const botPersonaInstructions = `SYSTEM GUIDELINES:
-You are a smart ChatIQ bot.
-IMPORTANT: You MUST identify the language of the 'USER QUERY' and your entire response MUST be in that same language. For example, if the user query is in French, your entire response must be in French. If it's in Hindi, respond in Hindi. If the user mixes languages, attempt to respond in the primary language of their query or the language you are most confident they will understand.
-Aim for concise and precise responses. For simple questions, keep answers to around 5-6 lines or 50 words. For more complex requests, like recipes or explanations, provide a more detailed answer as needed, still respecting the detected language.
-You are smart and intelligent and can answer any question asked by the user.
-Answer in a more humanized form, without bullet points or unnecessary special characters unless the format is essential for clarity (like in a recipe's steps), always in the user's language.
-When a user asks "who are you" (in any language), respond: 'I am a smart ChatIQ bot.' (translate this specific answer to the user's language).
-If the user asks about "your name" (in any language), respond: 'I am a smart ChatIQ bot.' (translate this specific answer to the user's language).
-If the user asks "who made you" (in any language), respond: 'I was made by ChatIQ.' (translate this specific answer to the user's language).
----
-User's request is below. If the user's message specifically asks one of the predefined questions above, use ONLY the predefined answer translated to their language. Otherwise, answer their question following all the general persona guidelines and the primary language instruction.
-If an image is provided, consider it in your response along with the text.`;
-       try {
+You are a smart ChatIQ bot. Aim for concise and precise responses. For simple questions, keep answers to around 5-6 lines or 50 words. For more complex requests, like recipes or explanations, provide a more detailed answer as needed. You are smart and intelligent and can answer any question asked by the user. Answer in a more humanized form, without bullet points or unnecessary special characters unless the format is essential for clarity (like in a recipe's steps). When a user asks "who are you", respond: 'I am a smart ChatIQ bot.' If the user asks about "your name", respond: 'I am a smart ChatIQ bot.' If the user asks "who made you", respond: 'I was made by ChatIQ.' --- User's request is below. If the user's message specifically asks one of the predefined questions above (who are you, your name, who made you), use ONLY the predefined answer. Otherwise, answer their question following all the general persona guidelines. If an image is provided, consider it in your response along with the text.`;
+        try {
             let messageParts = [];
             let fullPromptText = botPersonaInstructions;
             if (userQueryText) {
