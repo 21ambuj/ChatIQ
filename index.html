@@ -123,42 +123,7 @@
 </header>
 
     <main class="container mx-auto px-4 py-8 space-y-12">
-        <section class="text-center">
-            <h2 class="text-2xl font-semibold mb-4">One-to-One Voice Interaction</h2>
-            <button onclick="startListeningAdapter()" aria-label="Start Voice Chat with GIF">
-                <img
-                    src="https://cdn.dribbble.com/userupload/32122583/file/original-400827bdf243931c8ffd26a268a837ce.gif"
-                    alt="Voice Bot Banner"
-                    class="mx-auto w-full max-w-md rounded-2xl shadow-lg hover:scale-105 transition-transform"
-                />
-            </button>
-        </section>
-
-        <section class="max-w-xl mx-auto">
-            <div class="text-center mb-6">
-                <button 
-                    onclick="startListeningAdapter()" 
-                    class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-md transition text-lg font-medium flex items-center justify-center mx-auto"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="mr-2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm7 9a7 7 0 0 1-14 0H3a9 9 0 0 0 8 8.94V22h2v-3.06A9 9 0 0 0 21 10h-2z"></path></svg>
-                    Start Voice Chat
-                </button>
-            </div>
-            <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4 hidden" id="simpleChatDisplay"> 
-                <div id="userBox" class="hidden">
-                    <p class="text-sm text-gray-500 mb-1">You:</p>
-                    <div class="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-lg max-w-full">
-                        <span id="userText"></span>
-                    </div>
-                </div>
-                <div id="botBox" class="hidden">
-                    <p class="text-sm text-gray-500 mb-1">ChatIQ:</p>
-                    <div class="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-lg max-w-full">
-                        <span id="botText"></span>
-                    </div>
-                </div>
-            </div>
-        </section>
+       
 
        <section id="interactiveChatSection" 
          class="w-full mx-auto sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col" 
@@ -259,7 +224,7 @@
                     <path fill-rule="evenodd" d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.426 1.458 2.426 2.915V19.5a2.25 2.25 0 01-2.25 2.25H5.25a2.25 2.25 0 01-2.25-2.25V9.525c0-1.456.994-2.676 2.426-2.915.382-.064.766-.123 1.152-.177.465-.067.87-.327 1.11-.71l.82-1.318a2.996 2.996 0 012.332-1.39zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5z" clip-rule="evenodd" />
                     
                 </svg>
-                <h6> Cam</h6>
+                <h6> Camera</h6>
 
             </button>
 
@@ -278,13 +243,49 @@
                     <path class="mic-icon-path" d="M6 10.5a.75.75 0 01.75.75v.75a4.5 4.5 0 009 0V11.25a.75.75 0 011.5 0v.75a6 6 0 01-12 0V11.25A.75.75 0 016 10.5zM12 16.5a.75.75 0 00-.75.75v.75h1.5v-.75a.75.75 0 00-.75-.75z" />
                     
                 </svg>
-                <h6>Mic</h6>
+                <h6>Speak</h6>
             </button>
         </div>
 
         <h6 class="text-slate-500 text-center text-xs mt-3 sm:mt-4">ChatIQ can make mistakes. Please recheck and verify information.</h6>
     </div>
 </section>
+ <section class="text-center">
+            <h2 class="text-2xl font-semibold mb-4">One-to-One Voice Interaction</h2>
+            <button onclick="startListeningAdapter()" aria-label="Start Voice Chat with GIF">
+                <img
+                    src="https://cdn.dribbble.com/userupload/32122583/file/original-400827bdf243931c8ffd26a268a837ce.gif"
+                    alt="Voice Bot Banner"
+                    class="mx-auto w-full max-w-md rounded-2xl shadow-lg hover:scale-105 transition-transform"
+                />
+            </button>
+        </section>
+
+        <section class="max-w-xl mx-auto">
+            <div class="text-center mb-6">
+                <button 
+                    onclick="startListeningAdapter()" 
+                    class="bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-lg shadow-md transition text-lg font-medium flex items-center justify-center mx-auto"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="mr-2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3zm7 9a7 7 0 0 1-14 0H3a9 9 0 0 0 8 8.94V22h2v-3.06A9 9 0 0 0 21 10h-2z"></path></svg>
+                    Start Voice Chat
+                </button>
+            </div>
+            <div class="bg-white rounded-2xl shadow-lg p-6 space-y-4 hidden" id="simpleChatDisplay"> 
+                <div id="userBox" class="hidden">
+                    <p class="text-sm text-gray-500 mb-1">You:</p>
+                    <div class="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-lg max-w-full">
+                        <span id="userText"></span>
+                    </div>
+                </div>
+                <div id="botBox" class="hidden">
+                    <p class="text-sm text-gray-500 mb-1">ChatIQ:</p>
+                    <div class="inline-block bg-green-100 text-green-800 px-4 py-2 rounded-lg max-w-full">
+                        <span id="botText"></span>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section>
             <h2 class="text-2xl font-semibold text-center mb-8">Key Features</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
