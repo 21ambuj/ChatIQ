@@ -107,7 +107,7 @@
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <header class="relative bg-gradient-to-r from-cyan-500 to-indigo-600 text-white py-6 sm:py-8 text-center shadow-xl overflow-hidden">
+   <header class="relative bg-gradient-to-r from-cyan-500 to-indigo-600 text-white py-6 sm:py-8 text-center shadow-xl overflow-hidden">
     <h1 class="text-3xl font-black tracking-tight sm:text-4xl lg:text-5xl text-transparent bg-clip-text bg-gradient-to-br from-pink-400 via-purple-400 to-red-500
                animate-text-gradient">
         ChatIQ
@@ -160,122 +160,131 @@
             </div>
         </section>
 
-        <section id="interactiveChatSection" class="max-w-2xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col" style="min-height: 70vh; max-height:85vh;">
-            <div class="flex-grow overflow-y-auto p-3 sm:p-4 space-y-3" id="chatBoxWrapper"> <div id="imagePreviewContainer" class="hidden flex flex-col items-center space-y-2 mb-3">
-                    <img id="imagePreview" src="#" alt="Image Preview" class="max-w-full h-auto max-h-48 sm:max-h-60 rounded-lg shadow-md border-2 border-gray-200"/>
-                    <button id="removeImageBtn" class="text-red-500 hover:text-red-400 text-sm font-medium flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                        Remove Image
-                    </button>
-                </div>
-                <div id="videoPreviewContainer" class="hidden flex flex-col items-center space-y-2 mb-3">
-                    <video id="videoPreview" autoplay playsinline class="max-w-full h-auto max-h-48 sm:max-h-60 rounded-lg shadow-md border-2 border-gray-200 bg-gray-200"></video>
-                    <div class="flex space-x-2 mt-2">
-                        <button id="captureImageBtn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-3 rounded-lg transition duration-150 text-sm">Capture</button>
-                        <button id="stopCameraBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-lg transition duration-150 text-sm">Stop Camera</button>
-                    </div>
-                </div>
-                <div id="chatBox" class="space-y-4"> <div class="flex justify-start w-full">
-                        <div class="chat-bubble-bot">
-                            Hello! I am ChatIQ. How can I assist you today?
-                        </div>
-                    </div>
+       <section id="interactiveChatSection" 
+         class="w-full mx-auto sm:max-w-2xl md:max-w-3xl lg:max-w-5xl xl:max-w-6xl bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col" 
+         style="min-height: 70vh; max-height:85vh;">
+
+    <div class="flex-grow overflow-y-auto p-3 sm:p-4 space-y-3" id="chatBoxWrapper"> 
+        <div id="imagePreviewContainer" class="hidden flex flex-col items-center space-y-2 mb-3">
+            <img id="imagePreview" src="#" alt="Image Preview" class="max-w-full h-auto max-h-48 sm:max-h-60 rounded-lg shadow-md border-2 border-gray-200"/>
+            <button id="removeImageBtn" class="text-red-500 hover:text-red-400 text-sm font-medium flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-1"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                Remove Image
+            </button>
+        </div>
+        <div id="videoPreviewContainer" class="hidden flex flex-col items-center space-y-2 mb-3">
+            <video id="videoPreview" autoplay playsinline class="max-w-full h-auto max-h-48 sm:max-h-60 rounded-lg shadow-md border-2 border-gray-200 bg-gray-200"></video>
+            <div class="flex space-x-2 mt-2">
+                <button id="captureImageBtn" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-3 rounded-lg transition duration-150 text-sm">Capture</button>
+                <button id="stopCameraBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-3 rounded-lg transition duration-150 text-sm">Stop Camera</button>
+            </div>
+        </div>
+        <div id="chatBox" class="space-y-4"> 
+            <div class="flex justify-start w-full">
+                <div class="chat-bubble-bot">
+                    Hello! How can I assist you today?
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="chat-input-bar-container p-2 sm:p-3">
-                <div id="loadingIndicator" class="hidden text-center pb-2">
-                    <div class="flex justify-center items-center">
-                        <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-600"></div>
-                        <p class="text-cyan-700 ml-2 text-sm">ChatIQ is thinking...</p>
-                    </div>
-                </div>
-                <div id="errorMessage" class="hidden bg-red-100 text-red-700 p-2 rounded-md text-center mb-2 text-sm"></div>
-                <div class="flex items-center flex-wrap gap-3 p-4 bg-gradient-to-r from-cyan-600 to-blue-500 rounded-xl shadow-lg max-w-xl mx-auto">
-
-  <input
-    type="text"
-    id="userInput"
-    placeholder="Ask ChatIQ or describe image..."
-    class="flex-grow min-w-[150px] p-3 rounded-lg text-sm sm:text-base outline-none
-           bg-gradient-to-r from-white/90 to-white/70
-           focus:ring-4 focus:ring-cyan-400 focus:outline-none
-           transition duration-300
-           placeholder:text-gray-400"
-  />
-
-  <button
-    id="sendBtn"
-    title="Send Message"
-    class="control-button group bg-gradient-to-r from-cyan-400 to-blue-400 hover:from-blue-500 hover:to-cyan-500
-           p-3 rounded-lg shadow-md
-           text-white
-           transition duration-300
-           flex items-center justify-center
-           hover:scale-110 hover:rotate-3
-           active:scale-95"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 group-hover:animate-pulse">
-      <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
-    </svg>
-  </button>
-
-  <button
-    id="fileUploadBtn"
-    title="Upload Image"
-    class="control-button group bg-gradient-to-r from-purple-400 via-pink-500 to-red-400
-           p-3 rounded-lg shadow-md
-           text-white
-           transition duration-300
-           flex items-center justify-center
-           hover:scale-110 hover:rotate-3
-           active:scale-95"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 group-hover:animate-bounce">
-      <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V4.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5V15c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9c0 1.66 1.34 3 3 3s3-1.34 3-3V4.5C16 2.01 13.99 0 11.5 0S7 2.01 7 4.5V15c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"></path>
-    </svg>
-  </button>
-  <input type="file" id="fileInput" class="hidden" accept="image/*">
-
-  <button
-    id="cameraBtn"
-    title="Use Camera"
-    class="control-button group bg-gradient-to-r from-green-400 to-emerald-500
-           p-3 rounded-lg shadow-md
-           text-white
-           transition duration-300
-           flex items-center justify-center
-           hover:scale-110 hover:rotate-3
-           active:scale-95"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 group-hover:animate-pulse">
-      <path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" />
-      <path fill-rule="evenodd" d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.426 1.458 2.426 2.915V19.5a2.25 2.25 0 01-2.25 2.25H5.25a2.25 2.25 0 01-2.25-2.25V9.525c0-1.456.994-2.676 2.426-2.915.382-.064.766-.123 1.152-.177.465-.067.87-.327 1.11-.71l.82-1.318a2.996 2.996 0 012.332-1.39zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5z" clip-rule="evenodd" />
-    </svg>
-  </button>
-
-  <button
-    id="voiceInputBtn"
-    title="Voice Input"
-    class="control-button group bg-gradient-to-r from-pink-400 via-red-400 to-yellow-400
-           p-3 rounded-lg shadow-md
-           text-white
-           transition duration-300
-           flex items-center justify-center
-           hover:scale-110 hover:rotate-3
-           active:scale-95"
-  >
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mic-icon w-6 h-6" fill="currentColor">
-      <path class="mic-icon-path" fill-rule="evenodd" d="M12.75 3.006a3.75 3.75 0 013.75 3.75v6.75a3.75 3.75 0 01-7.5 0v-6.75a3.75 3.75 0 013.75-3.75zM8.25 8.254a.75.75 0 000 1.5v.75c0 1.657 1.343 3 3 3s3-1.343 3-3v-.75a.75.75 0 000-1.5h-.75a2.25 2.25 0 01-2.25-2.25v-.75a.75.75 0 00-1.5 0v.75A2.25 2.25 0 019 8.254h-.75zM15 13.5a.75.75 0 001.5 0v-2.628A6.002 6.002 0 006.75 8.25v2.628a.75.75 0 001.5 0V8.25c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5v5.25z" clip-rule="evenodd" />
-      <path class="mic-icon-path" d="M6 10.5a.75.75 0 01.75.75v.75a4.5 4.5 0 009 0V11.25a.75.75 0 011.5 0v.75a6 6 0 01-12 0V11.25A.75.75 0 016 10.5zM12 16.5a.75.75 0 00-.75.75v.75h1.5v-.75a.75.75 0 00-.75-.75z" fill="currentColor" />
-    </svg>
-  </button>
-</div>
-
-                <h6 class="text-red-500 text-center text-sm">ChatIQ can make mistake Please recheck and verify information</h6>
+    <div class="chat-input-bar-container p-2 sm:p-3 border-t border-gray-200">
+        <div id="loadingIndicator" class="hidden text-center pb-2">
+            <div class="flex justify-center items-center">
+                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-cyan-600"></div>
+                <p class="text-cyan-700 ml-2 text-sm">ChatIQ is thinking...</p>
             </div>
-        </section>
+        </div>
+        <div id="errorMessage" class="hidden bg-red-100 text-red-700 p-2 rounded-md text-center mb-2 text-sm"></div>
+        
+        <div class="flex items-center flex-wrap gap-2 sm:gap-3 p-3 sm:p-4 bg-gradient-to-r from-cyan-500 to-indigo-600 rounded-xl shadow-lg">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Ask ChatIQ or describe image..."
+                class="flex-grow min-w-[150px] p-3 rounded-lg text-sm sm:text-base outline-none
+                       bg-slate-900/30 
+                       text-white 
+                       placeholder:text-slate-300 
+                       focus:ring-2 focus:ring-sky-300 focus:bg-slate-900/40 
+                       transition duration-200 ease-in-out
+                       backdrop-blur-sm 
+                       shadow-sm"
+            />
 
+            <button
+                id="sendBtn"
+                title="Send Message"
+                class="group bg-white/20 hover:bg-white/30 backdrop-blur-sm 
+                       p-3 rounded-lg shadow-md
+                       text-white 
+                       transition duration-200 ease-in-out
+                       flex items-center justify-center
+                       hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
+                    <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z" />
+                </svg>
+            </button>
+
+            <button
+                id="fileUploadBtn"
+                title="Upload Image"
+                class="group bg-white/20 hover:bg-white/30 backdrop-blur-sm
+                       p-3 rounded-lg shadow-md
+                       text-white
+                       transition duration-200 ease-in-out
+                       flex items-center justify-center
+                       hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
+                    <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V4.5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5V15c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9c0 1.66 1.34 3 3 3s3-1.34 3-3V4.5C16 2.01 13.99 0 11.5 0S7 2.01 7 4.5V15c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"></path>
+                </svg>
+                <h6>upload</h6>
+            </button>
+            <input type="file" id="fileInput" class="hidden" accept="image/*">
+
+            <button
+                id="cameraBtn"
+                title="Use Camera"
+                class="group bg-white/20 hover:bg-white/30 backdrop-blur-sm
+                       p-3 rounded-lg shadow-md
+                       text-white
+                       transition duration-200 ease-in-out
+                       flex items-center justify-center
+                       hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 sm:w-6 sm:h-6">
+                    <path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" />
+                    <path fill-rule="evenodd" d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.426 1.458 2.426 2.915V19.5a2.25 2.25 0 01-2.25 2.25H5.25a2.25 2.25 0 01-2.25-2.25V9.525c0-1.456.994-2.676 2.426-2.915.382-.064.766-.123 1.152-.177.465-.067.87-.327 1.11-.71l.82-1.318a2.996 2.996 0 012.332-1.39zM12 6.75a5.25 5.25 0 100 10.5 5.25 5.25 0 000-10.5z" clip-rule="evenodd" />
+                    
+                </svg>
+                <h6> Cam</h6>
+
+            </button>
+
+            <button
+                id="voiceInputBtn"
+                title="Voice Input"
+                class="group bg-white/20 hover:bg-white/30 backdrop-blur-sm
+                       p-3 rounded-lg shadow-md
+                       text-white
+                       transition duration-200 ease-in-out
+                       flex items-center justify-center
+                       hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-white/50"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="mic-icon w-5 h-5 sm:w-6 sm:h-6" fill="currentColor">
+                    <path class="mic-icon-path" fill-rule="evenodd" d="M12.75 3.006a3.75 3.75 0 013.75 3.75v6.75a3.75 3.75 0 01-7.5 0v-6.75a3.75 3.75 0 013.75-3.75zM8.25 8.254a.75.75 0 000 1.5v.75c0 1.657 1.343 3 3 3s3-1.343 3-3v-.75a.75.75 0 000-1.5h-.75a2.25 2.25 0 01-2.25-2.25v-.75a.75.75 0 00-1.5 0v.75A2.25 2.25 0 019 8.254h-.75zM15 13.5a.75.75 0 001.5 0v-2.628A6.002 6.002 0 006.75 8.25v2.628a.75.75 0 001.5 0V8.25c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5v5.25z" clip-rule="evenodd" />
+                    <path class="mic-icon-path" d="M6 10.5a.75.75 0 01.75.75v.75a4.5 4.5 0 009 0V11.25a.75.75 0 011.5 0v.75a6 6 0 01-12 0V11.25A.75.75 0 016 10.5zM12 16.5a.75.75 0 00-.75.75v.75h1.5v-.75a.75.75 0 00-.75-.75z" />
+                    
+                </svg>
+                <h6>Mic</h6>
+            </button>
+        </div>
+
+        <h6 class="text-slate-500 text-center text-xs mt-3 sm:mt-4">ChatIQ can make mistakes. Please recheck and verify information.</h6>
+    </div>
+</section>
         <section>
             <h2 class="text-2xl font-semibold text-center mb-8">Key Features</h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
