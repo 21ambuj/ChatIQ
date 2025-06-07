@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatIQ Search Hub</title>
+  <script async src="https://cse.google.com/cse.js?cx=76e2df64c529843d4"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      /* Dark Theme Variables (as implied by body styles) */
+       
+      --bg-light-start: #e0e0e0;
+      --bg-light-end: #ffffff;
+--text-light: #1a1a2e;      --accent-color: #e94560;
+      --glass-bg-light: rgba(0, 0, 0, 0.05);
+      --border-color-light: rgba(0, 0, 0, 0.1);
+
+      /* Original Light Theme Variables (currently unused but kept for potential future use) */
+      --bg-light-start: #e0e0e0;
+      --bg-light-end: #ffffff;
+      --text-light: #1a1a2e;
+      --glass-bg-light: rgba(0, 0, 0, 0.05);
+      --border-color-light: rgba(0, 0, 0, 0.1);
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text-on-dark); /* Using defined dark theme text color */
+      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, var(--bg-dark-start), var(--bg-dark-mid), var(--bg-dark-end));
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .gcse-search { all: unset; }
+
+    .search-box-container {
+      background: var(--glass-bg-dark);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 20px;
+      /* Responsive padding: p-4 for small screens, p-6 for larger */
+      /* padding: 1.5rem; */ /* Replaced by Tailwind classes */
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color-dark);
+    }
+
+    .search-box input.gsc-input {
+      border-radius: 9999px !important;
+      padding: 14px 20px !important; /* Slightly reduced padding for mobile */
+      font-size: 1rem !important;    /* Slightly reduced font size for mobile */
+      width: 100% !important;
+      background: rgba(255, 255, 255, 0.1) !important;
+      color: var(--text-on-dark) !important;
+      box-shadow: none !important;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease !important;
+    }
+    @media (min-width: 640px) { /* sm breakpoint */
+        .search-box input.gsc-input {
+            padding: 16px 24px !important;
+            font-size: 1.1rem !important;
+        }
+    }
+
+    .search-box input.gsc-input::placeholder {
+      color: var(--text-on-dark-muted) !important; /* Use muted text color */
+      opacity: 0.8; /* Adjusted opacity */
+    }
+    .search-box input.gsc-input:focus {
+      background: rgba(255, 255, 255, 0.2) !important;
+      border-color: var(--accent-color) !important;
+      box-shadow: 0 0 0 2px var(--accent-color) !important;
+    }
+
+    .gsc-search-box, .gsc-control-cse {
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    .gsc-search-button { display: none !important; }
+
+    .fade-in-up {
+      animation: fadeInUp 0.8s ease-out forwards;
+      opacity: 0;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 1.2s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .inspiration-grid {
+      display: grid;
+      /* Responsive grid columns */
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* Smaller min for mobile */
+      gap: 0.75rem; /* Slightly reduced gap for mobile */
+      /* margin-top: 2rem; */ /* Replaced by Tailwind */
+      perspective: 1000px;
+      transition: opacity 0.3s ease, transform 0.3s ease, margin-top 0.3s ease, height 0.3s ease, visibility 0s linear 0.3s;
+    }
+    @media (min-width: 640px) { /* sm breakpoint */
+        .inspiration-grid {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+    }
+
+    .inspiration-grid.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+      pointer-events: none;
+      margin-top: 0;
+      height: 0;
+      overflow: hidden;
+      visibility: hidden;
+    }
+
+    .inspiration-item {
+      background: var(--glass-bg-dark);
+      border: 1px solid var(--border-color-dark);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      padding: 0.6rem 0.8rem; /* Adjusted padding for mobile */
+      border-radius: 10px;
+      font-size: 0.8rem; /* Adjusted font size for mobile */
+      color: var(--text-on-dark-muted); /* Use muted text for less emphasis */
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+      animation: fadeInGridItem 0.5s ease-out forwards;
+      opacity: 0;
+    }
+    .inspiration-item:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+      opacity: 1;
+      color: var(--text-on-dark); /* Brighter text on hover */
+    }
+    @keyframes fadeInGridItem {
+      to { opacity: 0.7; } /* Default opacity, hover makes it 1 */
+    }
+     @media (min-width: 640px) { /* sm breakpoint */
+        .inspiration-item {
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+        }
+    }
+
+
+    .gsc-results-wrapper-visible {
+      background: var(--glass-bg-dark) !important;
+      backdrop-filter: blur(15px) !important;
+      -webkit-backdrop-filter: blur(15px) !important;
+      color: var(--text-on-dark) !important;
+      border-radius: 20px;
+      margin-top: 1rem !important; /* Reduced margin from search bar */
+      padding: 1rem !important; /* Responsive padding */
+      width: 100%;
+      max-width: 100%; /* Ensure it doesn't overflow horizontally */
+      position: absolute;
+      /* Adjust top position to be below the search bar area.
+         This needs to be relative to the content flow.
+         Consider the header height + search bar height.
+         Approx. 60px (header) + 80px (search bar) + margin = ~150px
+         Making it less fixed, more adaptive to content above.
+      */
+      top: auto; /* Let it flow, or set based on dynamic height if necessary */
+      left: 0;
+      right: 0;
+      z-index: 500;
+      max-height: 70vh; /* Max height to control screen usage */
+      min-height: 300px; /* Min height to provide some space */
+      overflow-y: auto;
+      border: 1px solid var(--border-color-dark);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    @media (min-width: 640px) { /* sm breakpoint */
+        .gsc-results-wrapper-visible {
+            padding: 1.5rem !important;
+            margin-top: 1.5rem !important;
+        }
+    }
+    @media (min-width: 768px) { /* md breakpoint */
+        .gsc-results-wrapper-visible {
+            padding: 2rem !important;
+            margin-top: 2rem !important;
+        }
+    }
+
+    .gsc-results-wrapper-visible a.gs-title,
+    .gsc-results-wrapper-visible .gs-visibleUrl,
+    .gsc-results-wrapper-visible .gs-snippet {
+      color: var(--text-on-dark) !important;
+    }
+    .gsc-results-wrapper-visible a.gs-title {
+        font-size: 1rem !important; /* Mobile result title size */
+    }
+    @media (min-width: 640px) {
+        .gsc-results-wrapper-visible a.gs-title {
+            font-size: 1.125rem !important; /* Larger screen result title size */
+        }
+    }
+    .gsc-results-wrapper-visible a.gs-title:hover {
+      text-decoration: underline !important;
+      color: var(--accent-color) !important;
+    }
+    .gsc-results-wrapper-visible .gsc-cursor-page {
+      color: var(--accent-color) !important;
+    }
+    .gsc-results-wrapper-visible .gs-snippet {
+        font-size: 0.875rem !important; /* Result snippet size */
+    }
+
+
+    .voice-search-button {
+      background: var(--glass-bg-dark);
+      border: 1px solid var(--border-color-dark);
+      color: var(--text-on-dark);
+      border-radius: 50%;
+      width: 40px; /* Slightly smaller for mobile */
+      height: 40px; /* Slightly smaller for mobile */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      flex-shrink: 0; /* Prevent shrinking in flex layout */
+    }
+     @media (min-width: 640px) { /* sm breakpoint */
+        .voice-search-button {
+            width: 48px;
+            height: 48px;
+        }
+    }
+    .voice-search-button:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+    .voice-search-button svg {
+      width: 20px; /* Adjusted for smaller button */
+      height: 20px; /* Adjusted for smaller button */
+    }
+    @media (min-width: 640px) { /* sm breakpoint */
+        .voice-search-button svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    .chatiq-button {
+      background-image: linear-gradient(to right, #ec4899, #ef4444, #eab308);
+      color: white;
+      /* padding: 10px 20px; */ /* Replaced by Tailwind */
+      border-radius: 9999px;
+      font-weight: 500;
+      text-decoration: none;
+      /* font-size: 0.9rem; */ /* Replaced by Tailwind */
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+      display: inline-block;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      line-height: 1.5;
+      text-align: center; /* Ensure text centers if button wraps (though unlikely with padding) */
+    }
+    .chatiq-button:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+      opacity: 0.95;
+    }
+  </style>
+</head>
+<body>
+<header class="fade-in-up sticky top-0 z-[100] bg-opacity-50 backdrop-filter backdrop-blur-lg border-b border-white/10">
+  <div class="container mx-auto px-4 py-3 sm:px-6 sm:py-4 flex flex-row justify-between items-center">
+    <h1 class="text-2xl sm:text-3xl font-bold tracking-tight text-left">
+      <span class="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500">ChatIQ</span> Search
+    </h1>
+    <a href="index.html" target="_blank" rel="noopener noreferrer" class="chatiq-button text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2">Visit ChatIQ AI</a>
+  </div>
+</header>
+
+  <main class="flex-1 flex flex-col items-center justify-start pt-6 pb-8 sm:pt-8 md:pt-12 px-4 w-full">
+    <div class="w-full max-w-2xl lg:max-w-3xl relative z-40 fade-in-up" style="animation-delay: 0.2s;">
+        <div class="search-box-container p-3 sm:p-4 md:p-6">
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <div class="search-box flex-1 min-w-0"> <div class="gcse-search"></div>
+                </div>
+                <button onclick="startVoiceSearch()" class="voice-search-button" title="Voice Search" aria-label="Start voice search">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="inspirationGrid" class="inspiration-grid w-full max-w-3xl lg:max-w-5xl mt-6 sm:mt-8 md:mt-10 px-2 sm:px-4 fade-in-up" style="animation-delay: 0.4s;">
+    </div>
+  </main>
+
+  <footer class="text-center text-xs sm:text-sm py-4 sm:py-6 z-10 fade-in" style="animation-delay: 0.6s;">
+    <p class="opacity-70">© <span id="currentYear"></span> ChatIQ Search Hub | Powered by ChatIQ.ai</p>
+  </footer>
+
+  <script>
+  function startVoiceSearch() {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Speech recognition not supported in this browser.');
+      return;
+    }
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = function(event) {
+      const query = event.results[0][0].transcript;
+      performSearch(query);
+    };
+
+    recognition.onerror = function(event) {
+      alert('Error in voice search: ' + event.error);
+    };
+
+    recognition.start();
+  }
+
+  function hideInspirationGridFunction() {
+    const grid = document.getElementById('inspirationGrid');
+    if (grid && !grid.classList.contains('hidden')) {
+      grid.classList.add('hidden');
+    }
+  }
+
+  function positionResultsContainer() {
+      const searchContainer = document.querySelector('.search-box-container');
+      const resultsWrapper = document.querySelector('.gsc-results-wrapper-visible');
+      if (searchContainer && resultsWrapper) {
+          // Dynamically set top based on the search container's bottom position
+          // This is a basic example; you might need more robust logic
+          // The Google CSE often injects its own styles, which can be hard to override.
+          // The margin-top on resultsWrapper might be a more reliable CSS-only approach.
+          // resultsWrapper.style.top = searchContainer.offsetTop + searchContainer.offsetHeight + 20 + 'px';
+      }
+  }
+
+
+  function performSearch(query) {
+    const input = document.querySelector('input.gsc-input');
+    if (!input) return;
+    input.value = query;
+    hideInspirationGridFunction();
+    const e = new KeyboardEvent('keydown', { 'keyCode': 13, 'which': 13, 'key': 'Enter', 'code': 'Enter' });
+    input.dispatchEvent(e);
+    sessionStorage.setItem('lastSearch', query);
+
+    // Attempt to reposition results after search might trigger their display
+    // setTimeout(positionResultsContainer, 300); // Delay to allow results to render
+  }
+
+  function restoreLastSearch() {
+    const lastQuery = sessionStorage.getItem('lastSearch');
+    if (lastQuery) {
+      const input = document.querySelector('input.gsc-input');
+      if (input) {
+          input.value = lastQuery;
+          // If a search was restored, assume results will show, so hide grid
+          hideInspirationGridFunction();
+
+          // Optionally, re-trigger search display if needed, though CSE might do this
+          // const e = new KeyboardEvent('keydown', { 'keyCode': 13, 'which': 13, 'key': 'Enter', 'code': 'Enter' });
+          // input.dispatchEvent(e);
+          // setTimeout(positionResultsContainer, 300);
+      }
+    }
+  }
+
+  window.addEventListener('load', () => {
+    const inspirationGridElement = document.getElementById('inspirationGrid');
+    const prompts = [
+      "Modern art movements", "Machine learning basics", "Minimalist home design",
+      "Productivity hacks for students", "Psychology of motivation", "Pioneering inventions",
+      "Medieval history deep dive", "Making pasta from scratch", "Mastering photography",
+      "Popular travel destinations 2025", "Philosophy of Stoicism", "Planetary science news",
+      "DIY sustainable projects", "Mindfulness exercises", "Memorable movie quotes",
+      "Understanding cryptocurrency", "Promising tech startups", "Persuasive writing techniques",
+      "Quantum computing explained", "Must-read fantasy novels", "Marine biology facts",
+      "Python programming tutorials", "Parisian street style", "Political theory discussions"
+    ];
+
+    function setupSearchEnhancements() {
+      const input = document.querySelector('input.gsc-input');
+      if (input && inspirationGridElement) {
+        input.placeholder = "Explore the universe of information...";
+        input.addEventListener('input', () => {
+            if (input.value.trim() !== '') {
+                hideInspirationGridFunction();
+            }
+        });
+        input.addEventListener('focus', () => { // Also hide grid on focus if there's text
+            if (input.value.trim() !== '') {
+                hideInspirationGridFunction();
+            }
+        });
+        input.addEventListener('click', () => { // Also hide grid on click if there's text
+            if (input.value.trim() !== '') {
+                hideInspirationGridFunction();
+            }
+        });
+
+
+        // Observe when Google CSE adds search results
+        const resultsObserver = new MutationObserver((mutationsList, observer) => {
+            for(const mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    const resultsWrapper = document.querySelector('.gsc-results-wrapper-visible');
+                    if (resultsWrapper) {
+                        hideInspirationGridFunction(); // Hide grid when results appear
+                        // positionResultsContainer(); // Adjust position if needed
+                        // observer.disconnect(); // Optional: stop observing if only needed once
+                        break;
+                    }
+                }
+            }
+        });
+        // Start observing the body for additions of the results container
+        // This is broad; ideally, observe a more specific parent if known
+        resultsObserver.observe(document.body, { childList: true, subtree: true });
+
+
+        restoreLastSearch(); // This will hide grid if last search exists
+
+      } else {
+        setTimeout(setupSearchEnhancements, 100);
+      }
+    }
+    setupSearchEnhancements();
+
+    if (inspirationGridElement) {
+      prompts.forEach((prompt, index) => {
+        const item = document.createElement('div');
+        item.classList.add('inspiration-item');
+        item.textContent = prompt + "...";
+        item.style.animationDelay = `${index * 0.05}s`;
+        item.onclick = () => performSearch(prompt);
+        inspirationGridElement.appendChild(item);
+      });
+    }
+
+    const currentYearEl = document.getElementById('currentYear');
+    if (currentYearEl) {
+      currentYearEl.textContent = new Date().getFullYear();
+    }
+  });
+  </script>
+
+</body>
+</html>
